@@ -1,0 +1,1 @@
+module.exports.googleSpreadSheetURL='https://script.google.com/macros/s/AKfycby7tFpVylf2Tt_aI0J5Pnlr_1pVU7GHygWdGQjZJA/exec'
