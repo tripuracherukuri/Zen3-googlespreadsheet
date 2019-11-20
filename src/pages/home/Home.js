@@ -15,7 +15,7 @@ class Home extends Component {
       workItem: '',
       dueDate: '',
       resources: '',
-      status: '',
+      status: 'Overdue',
       items: JSON.parse(localStorage.getItem('Items')),
       selectedIndex: '',
       modalType: ''
@@ -24,7 +24,7 @@ class Home extends Component {
 
 
   toggle = () => {
-    this.setState({ modal: !this.state.modal, modalType: 'Add', workItem: '',dueDate: '', resources: '', status: '' })
+    this.setState({ modal: !this.state.modal, modalType: 'Add', workItem: '',dueDate: '', resources: '', status: 'Overdue' })
   }
 
   toggleDelete = (index) => {
@@ -72,11 +72,11 @@ class Home extends Component {
     else{
       if(localStorage.getItem('Items')){
         const items = JSON.parse(localStorage.getItem('Items'));
-        items.push(data);
+        items.unshift(data);
         localStorage.setItem('Items', JSON.stringify(items));
       } else{
         const dataArray = [];
-        dataArray.push(data);
+        dataArray.unshift(data);
         localStorage.setItem('Items', JSON.stringify(dataArray));
       }
     }
@@ -94,17 +94,15 @@ class Home extends Component {
   uploadToGoogleSpreadsheets = () => {
     let { items } = this.state
     const scriptURL = config.googleSpreadSheetURL;
-    {
-      for (var i = 0; i < items.length; i++) {
-        var formData = new FormData();
-        formData.append('Work Item', items[i].workItem);
-        formData.append('Due Date', items[i].dueDate);
-        formData.append('Resources', items[i].resources);
-        formData.append('Status', items[i].status);
-        fetch(scriptURL, { method: 'POST', body: formData })
-          .then(response => swal("", "Items uploaded to Google Spreadsheets", "success"))
-          .catch(error => console.error('Error!', error.message))
-      }
+    for (var i = 0; i < items.length; i++) {
+      var formData = new FormData();
+      formData.append('Work Item', items[i].workItem);
+      formData.append('Due Date', items[i].dueDate);
+      formData.append('Resources', items[i].resources);
+      formData.append('Status', items[i].status);
+      fetch(scriptURL, { method: 'POST', body: formData })
+        .then(response => swal("", "Items uploaded to Google Spreadsheets", "success"))
+        .catch(error => console.error('Error!', error.message))
     }
   }
 
